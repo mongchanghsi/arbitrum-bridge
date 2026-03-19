@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌉 Arbitrum Bridge (Sepolia → Arbitrum Sepolia)
 
-## Getting Started
+A lightweight Web3 bridge interface that allows users to seamlessly transfer ETH from Ethereum Sepolia to Arbitrum Sepolia using a clean, glassmorphism UI and step-based transaction feedback.
 
-First, run the development server:
+---
+
+## ✨ Features
+
+- 🔗 **Wallet Connection**
+  - Integrated with Reown AppKit for seamless wallet onboarding
+
+- 💸 **ETH Bridging**
+  - Bridge ETH from Sepolia to Arbitrum Sepolia via proxy contract
+
+- 📊 **Step-based Transaction Tracking**
+  - Real-time status updates:
+    - Not Started
+    - Loading
+    - Completed
+    - Failed
+
+- 🧊 **Modern Glass UI**
+  - Built with Tailwind CSS
+  - Backdrop blur + translucent components
+  - Clean and minimal Web3 UX
+
+- 🔍 **Explorer Integration**
+  - View transactions directly on Etherscan / Arbiscan
+
+---
+
+## 🧠 Architecture Overview
+
+### Frontend
+
+- **Next.js**
+- **React + TypeScript**
+- **Tailwind CSS**
+
+### Web3 Stack
+
+- **Reown AppKit** – Wallet connection
+- **wagmi / viem** – Blockchain interactions
+- **Custom hook (`useBridge`)** – Handles bridging logic + state
+
+---
+
+## 🔄 Bridge Flow
+
+1. User connects wallet
+2. Inputs ETH amount (validated up to 6 decimal places)
+3. Initiates bridge transaction
+4. UI updates step-by-step:
+   - Approval / Initiation
+   - L1 Transaction submission
+   - L2 execution (Arbitrum)
+5. Transaction hash is generated and linked to explorer
+
+---
+
+## 🧩 Key Components
+
+### `Bridge`
+
+- Main container for input, button, and status
+- Manages amount state and user interactions
+
+### `AmountInput`
+
+- Controlled input field
+- Restricts to numeric values with up to 6 decimals
+
+### `StatusStep`
+
+- Displays transaction progress
+- Minimal stepper UI with:
+  - Loading spinner
+  - Success / failure indicators
+  - Optional transaction hash
+
+### `useBridge`
+
+- Encapsulates bridge logic
+- Returns:
+  - `bridgeWithProxy`
+  - `statusSteps`
+
+---
+
+## 🎨 UI Design
+
+- Glassmorphism-based design system:
+  - `bg-white/10`
+  - `backdrop-blur-md`
+  - subtle borders and shadows
+- Focus on:
+  - clarity
+  - minimalism
+  - low cognitive load
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -1,0 +1,24 @@
+.ib__container {
+  display: inline-flex;
+}
+
+.ib__container:hover {
+  background: linear-gradient(45deg, #83caee, #4dc6c3);
+  transition: all 0.3s ease;
+}
+
+.ib__icon {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.ib__container:hover .ib__icon {
+  opacity: 1;
+  transform: translateX(-28px);
+}
+
+.ib__container:hover .ib__label {
+  transform: translateX(-14px);
+  transition: transform 0.3s ease;
+}

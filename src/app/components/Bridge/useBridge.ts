@@ -27,6 +27,12 @@ function useBridge() {
   const [parentTxnHash, setParentTxnHash] = useState<string>("");
   const [childTxnHash, setChildTxnHash] = useState<string>("");
 
+  const clearData = () => {
+    setStatusSteps([]);
+    setParentTxnHash("");
+    setChildTxnHash("");
+  };
+
   const getGasEstimate = async (amount: string) => {
     return await estimateGasAsync({
       address: L1_PROXY_ADDRESS,
@@ -230,6 +236,7 @@ function useBridge() {
     childTxnHash,
     parentTxnHash,
     getGasEstimate,
+    clearData,
   };
 }
 

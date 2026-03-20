@@ -21,6 +21,7 @@ const Bridge = () => {
     parentTxnHash,
     childTxnHash,
     getGasEstimate,
+    clearData,
   } = useBridge();
   const { getGasPriceAsync } = useGas();
   const [amount, setAmount] = useState<string>("");
@@ -57,6 +58,11 @@ const Bridge = () => {
     setAmount(maxEth.toFixed(6));
   };
 
+  const handleClear = () => {
+    setAmount("");
+    clearData();
+  };
+
   if (childTxnHash) {
     return (
       <Card>
@@ -82,6 +88,14 @@ const Bridge = () => {
           >
             View Arbitrum Transaction
           </a>
+
+          <button
+            onClick={handleClear}
+            type="button"
+            className="w-full rounded-2xl border border-white/20 bg-white/15 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-white/20 active:scale-[0.99] cursor-pointer"
+          >
+            Bridge more
+          </button>
         </div>
       </Card>
     );

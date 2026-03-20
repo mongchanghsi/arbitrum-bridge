@@ -7,7 +7,7 @@ import StatusStep from "../StatusStep";
 import useBridge from "./useBridge";
 import { getExplorerUrl } from "@/app/lib/url";
 import { useAccount, useBalance } from "wagmi";
-import { formatEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import useGas from "@/app/lib/gas";
 
 const Bridge = () => {
@@ -62,6 +62,11 @@ const Bridge = () => {
     setAmount("");
     clearData();
   };
+
+  const isInvalid =
+    !amount ||
+    parseEther(amount || "0") === 0n ||
+    (balance && parseEther(amount) > balance.value);
 
   if (childTxnHash) {
     return (
@@ -138,7 +143,8 @@ const Bridge = () => {
         <button
           onClick={handleBridge}
           type="button"
-          className="w-full rounded-2xl border border-white/20 bg-white/15 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-white/20 active:scale-[0.99] cursor-pointer"
+          disabled={isInvalid}
+          className="w-full rounded-2xl border border-white/20 bg-white/15 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-white/20 active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Bridge Now
         </button>

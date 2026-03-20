@@ -1,25 +1,60 @@
 "use client";
 
 import { useState } from "react";
-import Button from "../Shared/Button";
 import Card from "../Shared/Card";
 import AmountInput from "../Shared/Input";
 import StatusStep from "../StatusStep";
 import useBridge from "./useBridge";
 import { getExplorerUrl } from "@/app/lib/url";
+import { useAccount, useBalance } from "wagmi";
+import { formatEther } from "viem";
+import useGas from "@/app/lib/gas";
 
 const Bridge = () => {
-  const { bridgeWithProxy, statusSteps, parentTxnHash, childTxnHash } =
-    useBridge();
-  const [amount, setAmount] = useState("");
+  const { address } = useAccount();
+  const { data: balance } = useBalance({
+    address,
+  });
+  const {
+    bridgeWithProxy,
+    statusSteps,
+    parentTxnHash,
+    childTxnHash,
+    getGasEstimate,
+  } = useBridge();
+  const { getGasPriceAsync } = useGas();
+  const [amount, setAmount] = useState<string>("");
 
   const handleBridge = async () => {
     if (!amount) return;
     await bridgeWithProxy(amount);
   };
 
-  const handleMax = () => {
-    setAmount("1"); // for now
+  const handleMax = async () => {
+    if (!balance) return;
+
+    const gasPrice = await getGasPriceAsync();
+
+    const estimatedGas = await getGasEstimate(amount);
+
+    if (!gasPrice || !estimatedGas) {
+      const max = Math.max(Number(balance.formatted) - 0.0005, 0);
+      setAmount(max.toFixed(6));
+      return;
+    }
+
+    const gasCost = estimatedGas * gasPrice;
+
+    const maxWei = balance.value - gasCost;
+
+    if (maxWei <= 0n) {
+      setAmount("0");
+      return;
+    }
+
+    const maxEth = Number(formatEther(maxWei));
+
+    setAmount(maxEth.toFixed(6));
   };
 
   if (childTxnHash) {

@@ -1,6 +1,6 @@
-export type ExplorerType = "tx" | "address";
+type ExplorerType = "tx" | "address";
 
-export type Network = "mainnet" | "sepolia" | "arbitrum" | "arbitrumSepolia";
+type Network = "mainnet" | "sepolia" | "arbitrum" | "arbitrumSepolia";
 
 const EXPLORER_BASE: Record<Network, string> = {
   mainnet: "https://etherscan.io",

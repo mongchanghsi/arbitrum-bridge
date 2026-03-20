@@ -11,19 +11,31 @@ import { BridgeAbi } from "@/app/lib/abi/bridge";
 import { wagmiAdapter } from "@/config/ReownConfig";
 import { ParentTransactionReceipt, EthDepositMessage } from "@arbitrum/sdk";
 import { ENVIRONMENT } from "@/config/Environment";
+import useGas from "@/app/lib/gas";
 
 const ARBITRUM_SEPOLIA_RPC_URL = ENVIRONMENT.ARBITRUM_SEPOLIA_RPC_URL;
 const ETHEREUM_SEPOLIA_RPC_URL = ENVIRONMENT.ETHEREUM_SEPOLIA_RPC_URL;
 const L1_PROXY_ADDRESS = ENVIRONMENT.L1_PROXY_ADDRESS;
 
-const useBridge = () => {
+function useBridge() {
   const { address, connector } = useAccount();
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
+  const { estimateGasAsync } = useGas();
   const [statusSteps, setStatusSteps] = useState<StatusStepType[]>([]);
   const client = useClient({ config: wagmiAdapter.wagmiConfig });
   const [parentTxnHash, setParentTxnHash] = useState<string>("");
   const [childTxnHash, setChildTxnHash] = useState<string>("");
+
+  const getGasEstimate = async (amount: string) => {
+    return await estimateGasAsync({
+      address: L1_PROXY_ADDRESS,
+      abi: BridgeAbi,
+      functionName: "bridgeWithProxy",
+      args: [],
+      value: amount || "0.001",
+    });
+  };
 
   const updateStatus = (index: number, status: STATUS) => {
     setStatusSteps((prevState) =>
@@ -217,7 +229,8 @@ const useBridge = () => {
     statusSteps,
     childTxnHash,
     parentTxnHash,
+    getGasEstimate,
   };
-};
+}
 
 export default useBridge;

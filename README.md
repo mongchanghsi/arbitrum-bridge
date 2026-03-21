@@ -102,7 +102,10 @@ A lightweight Web3 bridge interface that allows users to seamlessly transfer ETH
 
 ## 🚀 Getting Started
 
+Get your Reown Project ID from [Reown](https://reown.com/) and paste it in `.env.template`
+
 ```bash
 npm install
+cp .env.template .env
 npm run dev
 ```
